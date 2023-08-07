@@ -13,11 +13,14 @@ body {
     background-color: #1f3c5b;
     color: #fff;
     padding: 35px;
-    height: 200px
+    height: 200px;
+    text-align: center;
+    display: flex;
   }
   
   h1 {
     font-size: 24px;
+    padding-top: 40px;
   }
   
   h2 {
@@ -52,4 +55,18 @@ body {
   .list-group .heading{
     color: azure;
     background-color: #092c54;
+  }
+
+  .uploaded-resume {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .resume-img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-left: 10px;
   }
