@@ -34,12 +34,14 @@
       <div class="col">
         <div class="content">
             <h2>CV Ranking</h2>
+            <form action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
             <h2>Job Description</h2>
             <input type="text" placeholder="Enter Job Description">
             <h2>Upload Resume</h2>
-            <input type="file" id="resume">
+            <input type="file" id="resume" name="files[]" multiple>
             <button>Upload</button>
             <div id="uploaded-resumes"></div>
+            </form>
         </div>
       </div>
       <div class="col-md-6">
