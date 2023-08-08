@@ -103,9 +103,17 @@
           resumeImg.src = e.target.result;
           resumeImg.alt = 'Resume Preview';
           resumeImg.classList.add('resume-img');
+          
+          const iframe = document.createElement('iframe');
+          iframe.src = URL.createObjectURL(file);
   
           resumeDiv.appendChild(resumeTitle);
-          resumeDiv.appendChild(resumeImg);
+          if (file && file.type === 'application/pdf'){
+           resumeDiv.appendChild(iframe);
+          }
+          else{
+            resumeDiv.appendChild(resumeImg);
+          }
           resumePreview.appendChild(resumeDiv);
         };
   
