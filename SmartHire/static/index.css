@@ -2,6 +2,7 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
+    background-image: linear-gradient(to right, rgb(173, 175, 198) , #1f3c5b);
   }
   
   .container {
@@ -14,13 +15,6 @@ body {
     color: #fff;
     padding: 35px;
     height: 200px;
-    text-align: center;
-    display: flex;
-  }
-  
-  h1 {
-    font-size: 24px;
-    padding-top: 40px;
   }
   
   h2 {
@@ -69,4 +63,29 @@ body {
     max-width: 100px;
     max-height: 100px;
     margin-left: 10px;
+  }
+  
+  .cssbuttons-io-button {
+    align-items: center;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 17px;
+    padding: 0.8em 1.5em 0.8em 1.2em;
+    color: white;
+    background: #1f3c5b;
+    border: none;
+    letter-spacing: 0.05em;
+    border-radius: 20em;
+  }
+  
+  .cssbuttons-io-button svg {
+    margin-right: 8px;
+  }
+  
+  .cssbuttons-io-button:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em rgb(110, 59, 197);
+  }
+  
+  .cssbuttons-io-button:active {
+    box-shadow: 0 0.3em 1em -0.5em rgb(246, 245, 248);
   }
