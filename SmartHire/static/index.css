@@ -1,5 +1,5 @@
 body {
-    font-family: sans-serif;
+  font-family: "Montserrat";
     margin: 0;
     padding: 0;
     background-image: linear-gradient(to right, rgb(173, 175, 198) , #1f3c5b);
@@ -76,6 +76,7 @@ body {
     border: none;
     letter-spacing: 0.05em;
     border-radius: 20em;
+    margin-top: 10px;
   }
   
   .cssbuttons-io-button svg {
