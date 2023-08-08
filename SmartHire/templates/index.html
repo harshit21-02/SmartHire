@@ -52,7 +52,7 @@
         <div class="content">
             <form action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
             <h2>Job Description</h2>
-            <textarea placeholder="Enter Job Description" style="width: 61%;"></textarea>
+            <textarea placeholder="Enter Job Description" style="width: 61%;" name="description"></textarea>
             <h2>Upload Resume</h2>
             <div>
             <input type="file" id="resume" name="resume" multiple>
