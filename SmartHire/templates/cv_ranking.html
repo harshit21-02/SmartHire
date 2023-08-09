@@ -50,26 +50,24 @@
 
   <div class="container">
     
-    <div class="row" style="padding-left: 35%;">
-      <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
         <div class="list-group candidate-details">
             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start heading">
                 Shortlisted Candidates
             </a>
 
             {% for candidate in candidate_details %}
-            {{candidate.id}}
             <div class="header candidate-card"> 
-              <div class="image">
-              </div> 
+              <h1>1</h1> 
               <div class="content">
-                <span class="name">{{Candidate.id}}</span> 
-                <p class="description">{{Candidate.id}} Experienced SWE from abc company with an avg experience of 4 years </p> 
+                <span class="name">{{candidate.id}}</span>
+                <p class="description">Experienced SWE from abc company with an avg experience of 4 years </p> 
               </div> 
               <div class="actions">
-                <button type="button" class="email">Email </button> 
+                <button type="button" class="email"> SHORTLISTED </button> 
                 <a href = "{% url 'send-email' candidate.id candidate.jobid %}">
-                <button type="button" class="open-resume">Open Resume</button>
+                <button type="button" class="open-resume";>Send Email for Interview</button>
                 </a>  
               </div> 
               </div> 

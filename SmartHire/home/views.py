@@ -12,7 +12,7 @@ import json
 from django.urls import reverse
 from .lang_chain_model import *
 from .utils import *
-
+from .scripts import *
 # from .sort_resume import ResumeSearch
 
 subscription_key = "9b7bc13b2fb0479c9ff6869409d9cdc1"
@@ -93,6 +93,7 @@ def interview(request, pk):
         item['question']=ques.question
         ques_list.append(item)
     print(ques_list)
+    print(screening(ques_list))
     return HttpResponse("INTERVIEW")
 
 def feedback(request, pk):

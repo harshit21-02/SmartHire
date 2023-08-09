@@ -14,13 +14,9 @@ body {
     background-color: #1f3c5b;
     color: #fff;
     padding: 35px;
-    height: 200px
+    height: 200px;
+    margin-bottom: 10px;
   }
-
-  .candidate-card{
-    height: 300px;
-  }
-
   
   .list-group .heading{
     color: azure;
@@ -28,7 +24,7 @@ body {
   }
 
   .candidate-details{
-    border: solid 1px;
+    border: 0px;
     border-radius: 6px;
     height: auto;
   }
@@ -73,11 +69,10 @@ body {
   }
   
   .name {
-    color: #066e29;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.5rem;
-    padding-left: 30%;
+    padding-left: 8%;
   }
   
   .message {
@@ -89,6 +84,8 @@ body {
   
   .actions {
     margin: 0.75rem 1rem;
+    display: inline-block;
+    width: 20%;
   }
   
   .email {
@@ -120,8 +117,21 @@ body {
     border: 1px solid #D1D5DB;
     background-color: #fff;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
   }
-  
+
+  h1{
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+  }
+    
+  .candidate-card .content {
+    display: inline-block;
+    width: 65%;
+    text-align: left;
+  }
+
   @keyframes animate {
     from {
       transform: scale(1);

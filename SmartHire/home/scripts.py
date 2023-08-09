@@ -4,21 +4,36 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import speech_recognition as sr
 import multiprocessing
+# questions = [{'id':1,'question':
+#         "What is your name?"},{'id':2,'question':
+#         "Tell us about your experience?"}
+#         # Add more questions here
+#     ]
+# Create a multiprocessing manager
+manager = multiprocessing.Manager()
+# Create a shared list using the manager
+shared_list = manager.list()
 
 def add_question_overlay(frame, question):
+    # Convert the frame to a Pillow image for text overlay
     img_pil = Image.fromarray(frame)
 
+    # Set font properties
     font = ImageFont.truetype("arial.ttf", 20)
     text_color = (255, 0, 255)  # White color
 
+    # Add the question as an overlay on the image
     draw = ImageDraw.Draw(img_pil)
     draw.text((10, 30), question, font=font, fill=text_color)
 
+    # Convert back to OpenCV format (numpy array)
     frame_with_overlay = np.array(img_pil)
 
     return frame_with_overlay
 
-def record_video():
+
+def record_video(questions):
+    # Open the video capture device (webcam)
     cap = cv2.VideoCapture(0)
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
@@ -28,54 +43,61 @@ def record_video():
                          cv2.VideoWriter_fourcc(*'MJPG'),
                          15, size)
 
-    questions = [
-        "What is your name?",
-        "Tell us about your experience.",
-        "What are your strengths?",
-        "Why do you want this job?",
-        # Add more questions here
-    ]
 
+    # Set the time limit for each question (in seconds)
     time_limit = 5
 
     for question in questions:
+
         start_time = time.time()
 
         while time.time() - start_time < time_limit:
             ret, frame = cap.read()
             result.write(frame)
         
-            frame_with_overlay = add_question_overlay(frame, question)
+            # Add the question overlay to the frame
+            frame_with_overlay = add_question_overlay(frame, question['question'])
 
+            # Display the frame with the question overlay
             cv2.imshow('Interview Question', frame_with_overlay)
 
+            # Press 'q' to break out of the loop and move to the next question
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
+
+    # Release video capture and close OpenCV windows
     cap.release()
     cv2.destroyAllWindows()
 
-def record_audio():
-    recognizer = sr.Recognizer()
+def record_audio(questions, shared_list):
+    
+    answers=[]
+    recording_duration = 4 
+    audio_list=[]
+    for question in questions:
 
-# Set the recording duration in seconds
-    recording_duration = 10  # Adjust this as needed
+        recognizer = sr.Recognizer()
 
-    with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source)
-        print("Recording...")
-        audio = recognizer.listen(source, timeout=recording_duration)
-
+    # Set the recording duration in seconds # Adjust this as needed
+        
+        with sr.Microphone() as source:
+            recognizer.adjust_for_ambient_noise(source)
+            print("Recording...")
+            audio = recognizer.listen(source,  phrase_time_limit=recording_duration)
+            audio_list.append(audio)
     # recognize the speech
     try:
-        transcript = recognizer.recognize_google(audio)
-        print("You said: " + transcript)
-        with open('transcript.txt', 'w') as f:
-            f.write(transcript)
+        for audio,question in zip(audio_list,questions):
+            transcript = recognizer.recognize_google(audio)
+            answers.append({'id':question['id'], 'answer': transcript})
+            print("You said: " + transcript)
+        # with open(f"{question['question']}.txt", 'w') as f:
+        #     f.write(transcript)
 
         # save the audio
-        with open("output.wav", "wb") as f:
-            f.write(audio.get_wav_data())
+        # with open(f"{question['question']}.wav", "wb") as f:
+        #     f.write(audio.get_wav_data())
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand your audio")
     except sr.RequestError as e:
@@ -83,11 +105,13 @@ def record_audio():
     except KeyboardInterrupt:
         print("Recording interrupted")
 
+    shared_list=answers
+    return answers
     print("Recording completed.")
 
-if __name__ == "__main__":
-    p1 = multiprocessing.Process(target=record_video)
-    p2 = multiprocessing.Process(target=record_audio)
+def screening(questions):
+    p1 = multiprocessing.Process(target=record_video, args=(questions,))
+    p2 = multiprocessing.Process(target=record_audio, args=(questions, shared_list))
 
     # Start the processes
     p1.start()
@@ -96,3 +120,6 @@ if __name__ == "__main__":
     # Wait for the processes to finish
     p1.join()
     p2.join()
+
+    return shared_list
+
