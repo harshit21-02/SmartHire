@@ -58,16 +58,20 @@
             </a>
 
             {% for candidate in candidate_details %}
+            {{candidate.id}}
             <div class="header candidate-card"> 
               <div class="image">
               </div> 
               <div class="content">
                 <span class="name">{{Candidate.id}}</span> 
-                <p class="description">Experienced SWE from abc company with an avg experience of 4 years </p> 
+                <p class="description">{{Candidate.id}} Experienced SWE from abc company with an avg experience of 4 years </p> 
               </div> 
               <div class="actions">
                 <button type="button" class="email">Email </button> 
-                <button type="button" class="open-resume">Open Resume</button> 
+                <a href = "{% url 'send-email' candidate.id candidate.jobid %}">
+                <button type="button" class="open-resume">Open Resume</button>
+                </a>  
+              </div> 
               </div> 
             </div>
             {% endfor %} 

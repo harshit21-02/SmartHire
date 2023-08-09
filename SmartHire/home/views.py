@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 import uuid
-from .models import Job, Resume
+from .models import Job, Resume, QuestionBank, CandidateResponse
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
@@ -11,7 +11,7 @@ import io
 import json
 from django.urls import reverse
 from .lang_chain_model import *
-
+from .utils import *
 
 # from .sort_resume import ResumeSearch
 
@@ -51,9 +51,15 @@ def upload_files(request):
             resume = Resume.objects.get(id=num)
             resume.shortlisted=True
             resume.save()
-            print(resume.id)
+            item = pdf_to_text(resume)
+            final_questions = get_question(job_desc=description, resume = item)
+            print(final_questions)
+            for ques in final_questions:
+                ques_item = QuestionBank(resume = resume, question = ques)
+                ques_item.save()
         redirect_url = reverse('cv_ranking', kwargs={'pk': job_instance.id})
         return redirect(redirect_url)
+
     return render(request, 'index.html')
 
 
@@ -63,16 +69,43 @@ def cv_ranking(request, pk):
     resume_list = Resume.objects.filter(job=job,shortlisted=True)
     candidate_details=[]
     for resume in resume_list:
-        # item = pdf_to_text(resume)
-        # final_questions = get_question(job_desc=job.description, resume = item)
-        # print(final_questions)
         candidate={}
+        candidate['jobid']=job.id
         candidate['id']=resume.id
         candidate_details.append(candidate)
-        # print()
+    return render(request, 'cv_ranking.html',context={'candidate_details': candidate_details})
 
-    return render(request, 'cv_ranking.html',{"candidate_details": candidate_details})
 
+def send_email(request, pk, jobid):
+    print("here")
+    print(pk)
+    interview_url = "http://localhost:8000/interview/"+str(pk)+"/"
+    send_email_to_client(message=str("Please attend this interview "+str(interview_url)), recipient="c.harshit2102@gmai.com")
+    redirect_url = reverse('cv_ranking', kwargs={'pk': jobid})
+    return redirect(redirect_url)
+
+def interview(request, pk):
+    questions = QuestionBank.objects.filter(resume=pk)
+    ques_list=[]
+    for ques in questions:
+        item={}
+        item['id']=ques.id
+        item['question']=ques.question
+        ques_list.append(item)
+    print(ques_list)
+    return HttpResponse("INTERVIEW")
+
+def feedback(request, pk):
+    ques_list = QuestionBank.objects.filter(resume=pk)
+    feedback_list=[]
+    for ques in ques_list:
+        ans = CandidateResponse.objects.get(question=ques)
+        feedback_item={}
+        feedback_item['question']=ques.question
+        feedback_item['answer']=ans.answer
+        feedback_item['feedback']=interview_response(ques.question,ans)
+        feedback_list.append(feedback_item)
+    return HttpResponse("INTERVIEW Response here")
 
 
 def pdf_to_text(resume):
@@ -114,6 +147,8 @@ def azure_to_aws(read_result):
         "AnalyzeDocumentModelVersion": "",
         "ResponseMetadata": {},
     }
+
+    
     for line in azure_response:
         TextType = line["appearance"]["style"]["name"]
         if TextType == "handwritting":
