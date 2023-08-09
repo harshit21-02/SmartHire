@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("",views.upload_files),
+    path('cv_ranking/<int:pk>/', views.cv_ranking, name='cv_ranking'),
 ]
 
 if settings.DEBUG:
