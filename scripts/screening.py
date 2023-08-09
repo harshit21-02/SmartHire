@@ -41,7 +41,7 @@ def record_video(questions):
 
 
     # Set the time limit for each question (in seconds)
-    time_limit = 10
+    time_limit = 4
 
     for question in questions:
         start_time = time.time()
@@ -65,28 +65,27 @@ def record_video(questions):
     cv2.destroyAllWindows()
 def record_audio(questions):
     answers = []
+    recording_duration = 4 
     for question in questions:
 
 
         recognizer = sr.Recognizer()
 
-    # Set the recording duration in seconds
-        recording_duration = 10  # Adjust this as needed
+    # Set the recording duration in seconds # Adjust this as needed
 
         with sr.Microphone() as source:
             recognizer.adjust_for_ambient_noise(source)
             print("Recording...")
             audio = recognizer.listen(source, timeout=recording_duration)
-
         # recognize the speech
         try:
             transcript = recognizer.recognize_google(audio)
             print("You said: " + transcript)
-            with open(f'{question}.txt', 'w') as f:
+            with open(f"{question['question']}.txt", 'w') as f:
                 f.write(transcript)
 
             # save the audio
-            with open(f"{question}.wav", "wb") as f:
+            with open(f"{question['question']}.wav", "wb") as f:
                 f.write(audio.get_wav_data())
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand your audio")
