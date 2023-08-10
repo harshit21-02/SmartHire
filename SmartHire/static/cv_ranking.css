@@ -14,7 +14,7 @@ body {
     background-color: #1f3c5b;
     color: #fff;
     padding: 35px;
-    height: 200px;
+    height: auto;
     margin-bottom: 10px;
   }
   
@@ -131,7 +131,10 @@ body {
     width: 65%;
     text-align: left;
   }
-
+  .candidate-card{
+    margin-top: 4px;
+    border-radius: 6px;
+  }
   @keyframes animate {
     from {
       transform: scale(1);

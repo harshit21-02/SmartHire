@@ -23,6 +23,10 @@ computervision_client = ComputerVisionClient(
 
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 def upload_files(request):
     if request.method == 'POST':
         files = request.FILES.getlist('resume')
@@ -52,12 +56,19 @@ def upload_files(request):
             resume.shortlisted=True
             resume.save()
             item = pdf_to_text(resume)
-            final_questions = get_question(job_desc=description, resume = item)
-            print(final_questions)
-            for ques in final_questions:
-                ques_item = QuestionBank(resume = resume, question = ques)
-                ques_item.save()
-        redirect_url = reverse('cv_ranking', kwargs={'pk': job_instance.id})
+            name,phone,email,work = extract_info(resume= item)
+            resume.mobile_no = phone
+            resume.summary = work
+            resume.name = name
+            resume.email = email
+            resume.shortlisted=True
+            resume.save()
+            # final_questions = get_question(job_desc=description, resume = item)
+            # print(final_questions)
+            # for ques in final_questions:
+            #     ques_item = QuestionBank(resume = resume, question = ques)
+            #     ques_item.save()
+        redirect_url = reverse('send-email', kwargs={'jobid': job_instance.id})
         return redirect(redirect_url)
 
     return render(request, 'index.html')
@@ -65,60 +76,80 @@ def upload_files(request):
 
 def cv_ranking(request, pk):
     serial_no = 1
-    job=Job.objects.get(id=pk)
-    resume_list = Resume.objects.filter(job=job,shortlisted=True)
+    # job=Job.objects.get(id=pk)
+    resume_list = Resume.objects.filter(job=pk,shortlisted=True)
     candidate_details=[]
     for resume in resume_list:
         candidate={}
-        candidate['jobid']=job.id
+        candidate['jobid']=pk
         candidate['id']=resume.id
+        candidate['name']=resume.name
+        candidate['mobile_no']=resume.mobile_no
+        candidate['email']=resume.email
+        candidate['work']=resume.summary
         candidate['serial_no']=serial_no
         candidate_details.append(candidate)
         serial_no+=1
     return render(request, 'cv_ranking.html',context={'candidate_details': candidate_details})
 
 
-def send_email(request, pk, jobid):
+def send_email(request, jobid):
     print("here")
-    print(pk)
-    interview_url = "http://localhost:8000/interview/"+str(pk)+"/"
-    send_email_to_client(message=str("Please attend this interview "+str(interview_url)), recipient="c.harshit2102@gmai.com")
+    resume_list=Resume.objects.filter(job=jobid)
+    for resume in resume_list:
+        recipient = resume.email
+        print(recipient)
+        interview_url = "http://localhost:8000/interview/"+str(resume.id)+"/"
+        send_email_to_client(message=str("Please attend this interview "+str(interview_url)), recipient="c.harshit2102@gmail.com")
     redirect_url = reverse('cv_ranking', kwargs={'pk': jobid})
     return redirect(redirect_url)
 
 def interview(request, pk):
-    questions = QuestionBank.objects.filter(resume=pk)
-    ques_list=[]
-    for ques in questions:
-        item={}
-        item['id']=ques.id
-        item['question']=ques.question
-        ques_list.append(item)
-    print(ques_list)
+    # questions = QuestionBank.objects.filter(resume=pk)
+    # ques_list=[]
+    # for ques in questions:
+    #     item={}
+    #     item['id']=ques.id
+    #     item['question']=ques.question
+    #     ques_list.append(item)
+    # print(ques_list)
     # screening(ques_list)
-    print(shared_list)
-    with open('home/transcript.txt','r') as f:
-        for line in f:
-            line_list=line.split('#')
-            ques = QuestionBank.objects.get(id=line_list[0])
-            ans = CandidateResponse(question=ques,answer=line_list[1])
-            ans.save()
-    return HttpResponse("INTERVIEW")
+    # print(shared_list)
+    # with open('home/transcript.txt','r') as f:
+    #     for line in f:
+    #         line_list=line.split('#')
+    #         ques = QuestionBank.objects.get(id=line_list[0])
+    #         ans = CandidateResponse(question=ques,answer=line_list[1])
+    #         ans.save()
+    return render(request, 'interview.html')
 
 def feedback(request, pk):
     ques_list = QuestionBank.objects.filter(resume=pk)
+    candidate = Resume.objects.get(id=pk)
+
     feedback_list=[]
+    count = 1
     for ques in ques_list:
-        ans = CandidateResponse.objects.get(question=ques)
-        feedback_item={}
-        feedback_item['question']=ques.question
-        feedback_item['answer']=ans.answer
-        feedback_item['feedback']=interview_response(ques.question,ans)
-        feedback_list.append(feedback_item)
+        answers = CandidateResponse.objects.filter(question=ques)
+        for ans in answers:
+            ans.feedback="feedback here"
+            #interview_response(ques.question,ans.answer)
+            ans.save()
+            feedback_item={}
+            feedback_item['serial_no']=count
+            feedback_item['question']=ques.question
+            feedback_item['answer']=ans.answer
+            print(ans.id)
+            feedback_item['feedback']=ans.feedback
+            
+            feedback_list.append(feedback_item)
+            break
+        count+=1
+        if count == 4:
+            break
     
     print(feedback_list)
-
-    return HttpResponse("INTERVIEW Response here")
+    return render(request, 'feedback.html',context={'feedback': feedback_list, 'candidate': candidate})
 
 
 def pdf_to_text(resume):

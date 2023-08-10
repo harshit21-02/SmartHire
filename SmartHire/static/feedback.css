@@ -14,7 +14,7 @@ body {
     background-color: #1f3c5b;
     color: #fff;
     padding: 35px;
-    height: 200px;
+    height: auto;
     margin-bottom: 10px;
   }
   
@@ -65,7 +65,7 @@ body {
   
   .description {
     margin-top: 0.75rem;
-    text-align: center;
+    text-align: left;
   }
   
   .name {

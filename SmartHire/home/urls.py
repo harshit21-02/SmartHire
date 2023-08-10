@@ -20,9 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("",views.upload_files),
+    path('',views.home),
+    path('upload/',views.upload_files),
     path('cv-ranking/<int:pk>/', views.cv_ranking, name='cv_ranking'),
-    path('send-email/<int:pk>/<int:jobid>', views.send_email, name='send-email'),
+    path('send-email/<int:jobid>/', views.send_email, name='send-email'),
     path('interview/<int:pk>/', views.interview, name='interview'),
     path('feedback/<int:pk>/', views.feedback, name='feedback'),
 ]

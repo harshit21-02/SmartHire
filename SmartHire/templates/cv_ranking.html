@@ -23,7 +23,8 @@
       <!-- Nav Bar (from BootStrap documentation) -->
       <nav class="navbar navbar-expand-lg navbar-dark">
         
-        <a><img src="{% static 'images/curriculum-vitae_924498.png' %}" style="width: 130px;"></a>
+        <a><img src="{% static 'images\logo.png' %}" style="width: 130px; margin-right: 5px;"></a>
+  
         <a class="navbar-brand" href="/">SmartHire</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +37,7 @@
                 <a class="nav-link" href="/"> Home</a>
               </li>
             <li class="navbar-item">
-              <a class="nav-link" href="index.html"> Upload Resume</a>
+              <a class="nav-link" href="upload/"> Upload Resume</a>
             </li>
           </ul>
         </div>
@@ -60,15 +61,16 @@
             <div class="header candidate-card"> 
               <h1>{{candidate.serial_no}}</h1> 
               <div class="content">
-                <span class="name">Candidate ID {{candidate.id}}</span><br>
-                <p class="description">Experienced SWE from abc company with an avg experience of 4 years. Good with web dev and AI, ML technologies</p> 
-                <a href="feedback.html" style="color: aliceblue;"><p class="description">Check feedback<i class="fa-solid fa-file-import"></i></p></a>
+                <span class="name">{{candidate.name}}</span><br>
+                
+                <p class="description"> Professional Experience : {{candidate.work}}</p> 
+                <p class="description"> Contact No. : {{candidate.mobile_no}}</p> 
+                <a href="{% url 'feedback' candidate.id  %}" style="color: aliceblue;"><p class="description">Check feedback<i class="fa-solid fa-file-import"></i></p></a>
               </div> 
               <div class="actions">
                 <button type="button" class="email"> SHORTLISTED </button> 
-                <a href = "{% url 'send-email' candidate.id candidate.jobid %}">
-                <button type="button" class="open-resume";>Send Email for Interview</button>
-                </a>  
+                <button type="button" class="open-resume";>Mail Sent for Interview</button>
+          
               </div> 
               </div> 
               {% endfor %} 

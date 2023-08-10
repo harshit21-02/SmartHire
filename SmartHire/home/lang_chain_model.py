@@ -4,7 +4,7 @@ from langchain import PromptTemplate, LLMChain
 from langchain.callbacks import get_openai_callback
 import os
 from dotenv import load_dotenv
-
+import re
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
@@ -70,3 +70,36 @@ qa_eval_chain = LLMChain(
 def interview_response(ques,ans):
     qa_eval_text = qa_eval_chain.predict(question = ques,answer = ans) # Put question string in place of ques and answer string in place of ans.
     return qa_eval_text
+
+
+extract_prompt_template = '''You are given a Resume (delimited by <qse></qse>). Extract the Name of the candidate, Phone Number, Email Id of the candidate and carefully look at the resume details provided and
+Summarize the work experience of the candidate in total number months or years. The work experience should be stated after the work experience Words. Do not confuse Work Experience with other things The current month is August 2023.
+<qse>
+{resume}
+</qse>
+------
+<out>
+Name: .....,
+Phone Number: .....,
+Email ID: .....,
+Work Experience: .....,
+</out>
+------
+Output:'''
+
+extract_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate.from_template(extract_prompt_template)
+)
+
+def extract_info(resume):
+    text = extract_chain.predict(resume = resume)
+    # name = re.search(r"Name:\s+(.+)", text).group(1)
+    # email = re.search(r"Email ID:\s+([\w\.-]+@[\w\.-]+)", text).group(1)
+    li = text.split('\n')
+    name = li[0].split(':')[-1]
+    phone = li[1].split(':')[-1]
+    email = li[2].split(':')[-1]
+    work = li[3].split(':')[-1]
+    
+    return name,phone,email,work
