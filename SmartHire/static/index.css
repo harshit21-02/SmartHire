@@ -90,3 +90,11 @@ body {
   .cssbuttons-io-button:active {
     box-shadow: 0 0.3em 1em -0.5em rgb(246, 245, 248);
   }
+
+  .description{
+    width: 70%;
+    height: 130px;
+    border-radius:8px;
+    padding: 10px 10px;
+    margin-bottom: 4px;
+  }

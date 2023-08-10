@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resume Upload Website</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../static/feedback.css">
+<link rel="stylesheet" href="{% static 'feedback.css' %}">
+
+ <!-- fontawesome -->
+ <script src="https://kit.fontawesome.com/b70f3ea85a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <section class="colored-section" id="title">
+
+    <div class="header">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        
+        <a><img src="{% static 'images/curriculum-vitae_924498.png' %}" style="width: 130px;"></a>
+        <a class="navbar-brand" href="/">SmartHire</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav ml-auto">
+            <!-- ml auto creates margin here between the brand and the rest of the nav bar -->
+            <li class="navbar-item">
+                <a class="nav-link" href="/"> Home</a>
+              </li>
+            <li class="navbar-item">
+              <a class="nav-link" href="/"> Upload Resume</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      </div>
+
+    </div>
+    </div>
+  </section>
+
+  <div class="container">
+    
+    <div class="col-md-12">
+        <div class="list-group candidate-details">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start heading">
+                Shortlisted Candidates
+            </a>
+
+           <div class="header candidate-card"> 
+              <h1>1</h1> 
+              <div class="content">
+                <span class="name">Candidate ID </span>
+                <p class="description">Experienced SWE from abc company with an avg experience of 4 years </p> 
+              </div> 
+              <div class="actions">
+                <button type="button" class="email"> SHORTLISTED </button> 
+                <a href = "{% url 'send-email' candidate.id candidate.jobid %}">
+                <button type="button" class="open-resume";>Send Email for Interview</button>
+                </a>  
+              </div> 
+              </div> 
+            </div>
+
+            <button data-toggle="collapse" data-target="#demo" class="feedback-button">--Candidate Input --<i class="fa-solid fa-pen"></i></button>
+            <div id="demo" class="collapse">
+              <div class="header question-card"> 
+                <h1>Q. 1</h1> 
+                <div class="content">
+                  <span class="question">Question : What is the time complexity of Merge Sort </span>
+                  <p class="answer">Answer : O(N * logN) </p> 
+                </div>
+              </div>
+
+              <div class="header question-card">  
+                <h1>Q. 2</h1> 
+                <div class="content">
+                  <span class="question">Question : What is the time complexity of Merge Sort </span>
+                  <p class="answer">Answer : O(N * logN) </p> 
+                </div>
+              </div>
+
+              <div class="header question-card"> 
+                <h1>Q. 3</h1> 
+                <div class="content">
+                  <span class="question">Question : What is the time complexity of Merge Sort </span>
+                  <p class="answer">Answer : O(N * logN) </p> 
+                </div>
+              </div>
+
+              <div class="header question-card">  
+                <h1>Q. 4</h1> 
+                <div class="content">
+                  <span class="question">Question : What is the time complexity of Merge Sort </span>
+                  <p class="answer">Answer : O(N * logN) </p> 
+                </div>
+              </div>
+
+              <div class="header question-card">  
+                <h1>Q. 5</h1> 
+                <div class="content">
+                  <span class="question">Question : What is the time complexity of Merge Sort </span>
+                  <p class="answer">Answer : O(N * logN) </p> 
+                </div>
+              </div>
+
+            </div>  
+
+              
+        </div>
+
+    </div>
+
+
+
+
+</body>
+</html>
