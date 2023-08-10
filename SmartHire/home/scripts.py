@@ -43,7 +43,7 @@ def record_video(questions):
 
 
     # Set the time limit for each question (in seconds)
-    time_limit = 5
+    time_limit = 10
 
     for question in questions:
 
@@ -71,7 +71,7 @@ def record_video(questions):
 def record_audio(questions):
     
     answers=[]
-    recording_duration = 4 
+    recording_duration = 8 
     audio_list=[]
     for question in questions:
 
@@ -103,6 +103,8 @@ def record_audio(questions):
     except KeyboardInterrupt:
         print("Recording interrupted")
 
+    with open("home/transcript.txt",'w') as f:
+        f.write("")
     with open("home/transcript.txt",'a') as f:
         for items in answers:
             f.write(str(items['id'])+'#'+items['answer']+'\n')

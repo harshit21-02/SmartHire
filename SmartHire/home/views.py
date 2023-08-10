@@ -101,7 +101,7 @@ def cv_ranking(request, pk):
 
 def send_email(request, jobid):
     print("Sending Mails")
-    resume_list=Resume.objects.filter(job=jobid)
+    resume_list=Resume.objects.filter(job=jobid, shortlisted = True)
     for resume in resume_list:
         recipient = resume.email
         print(recipient)
@@ -127,11 +127,12 @@ def interview(request, pk):
     with open('home/transcript.txt','r') as f:
         for line in f:
             line_list=line.split('#')
-            ques = QuestionBank.objects.get(id=line_list[0])
-            response = CandidateResponse(question=ques,answer=line_list[1])
-            feedback=interview_response(ques.question,line_list[1])
-            response.feedback=feedback
-            response.save()
+            if line_list[0] is not None:
+                ques = QuestionBank.objects.get(id=line_list[0])
+                response = CandidateResponse(question=ques,answer=line_list[1])
+                feedback=interview_response(ques.question,line_list[1])
+                response.feedback=feedback
+                response.save()
     print("Saved Responses and Feedback")
     return render(request, 'interview.html')
 

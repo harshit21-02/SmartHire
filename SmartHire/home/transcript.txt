@@ -1,14 +1,3 @@
-74#Can you provide examples of the aptitude questions
-75#how do you replicate a pigment design
-76#describe your internships as a DSS scholar inter
-77#about the project in steel server
-119#hello my name is Harshit Chaurasia
-120#proficient are you in programming languages such
-121#have you worked with web development Technology
-122#are you familiar with version control tools like it and get up
-123#developed applications using framework
-119#my name is Harshit Chaurasia
-120#I have very good knowledge about programming languages such as C
-121#I have worked with web development Technology such as HTML
-122#India with Persian controls like kit and get up
-123#development many applications using frameworks like react
+191#yes I have many projects like a scan and Apna Pan and also
+192#high quality integration
+193#ok
