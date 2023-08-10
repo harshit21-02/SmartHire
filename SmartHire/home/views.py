@@ -13,7 +13,7 @@ from django.urls import reverse
 from .lang_chain_model import *
 from .utils import *
 from .scripts import *
-# from .sort_resume import ResumeSearch
+from .sort_resume import ResumeSearch
 
 subscription_key = "9b7bc13b2fb0479c9ff6869409d9cdc1"
 endpoint = "https://pibit-azure-ocr-paid.cognitiveservices.azure.com/"
@@ -42,15 +42,19 @@ def upload_files(request):
         for file in files:
             resume_item = Resume(job=job_instance, file=file)
             resume_item.save()
-            ranking.append(resume_item.id)
+            # ranking.append(resume_item.id)
             item = pdf_to_text(resume_item)
             item_list.append(item)
             # print(item)
 
-        # res_search = ResumeSearch()
-        # top_10 = res_search.get_top_10(description, item_list)
-        # ranking = res_search.rerank_resumes(description, top_10)
-    
+        print("Shortlisting Candidates")
+        res_search = ResumeSearch()
+        top_10 = res_search.get_top_10(description, item_list)
+
+        print("Rranking for top 5 Candidates")
+        ranking = res_search.rerank_resumes(description, top_10)
+
+        print("Saving Questions for Candidates")
         for num in ranking:
             resume = Resume.objects.get(id=num)
             resume.shortlisted=True
@@ -63,11 +67,14 @@ def upload_files(request):
             resume.email = email
             resume.shortlisted=True
             resume.save()
-            # final_questions = get_question(job_desc=description, resume = item)
-            # print(final_questions)
-            # for ques in final_questions:
-            #     ques_item = QuestionBank(resume = resume, question = ques)
-            #     ques_item.save()
+            final_questions = get_question(job_desc=description, resume = item)
+            count = 1
+            for ques in final_questions:
+                ques_item = QuestionBank(resume = resume, question = ques)
+                ques_item.save()
+                count+=1
+                if count == 4:
+                    break
         redirect_url = reverse('send-email', kwargs={'jobid': job_instance.id})
         return redirect(redirect_url)
 
@@ -76,7 +83,6 @@ def upload_files(request):
 
 def cv_ranking(request, pk):
     serial_no = 1
-    # job=Job.objects.get(id=pk)
     resume_list = Resume.objects.filter(job=pk,shortlisted=True)
     candidate_details=[]
     for resume in resume_list:
@@ -94,33 +100,39 @@ def cv_ranking(request, pk):
 
 
 def send_email(request, jobid):
-    print("here")
+    print("Sending Mails")
     resume_list=Resume.objects.filter(job=jobid)
     for resume in resume_list:
         recipient = resume.email
         print(recipient)
         interview_url = "http://localhost:8000/interview/"+str(resume.id)+"/"
         send_email_to_client(message=str("Please attend this interview "+str(interview_url)), recipient="c.harshit2102@gmail.com")
+    print("All Mails Sent")
     redirect_url = reverse('cv_ranking', kwargs={'pk': jobid})
     return redirect(redirect_url)
 
 def interview(request, pk):
-    # questions = QuestionBank.objects.filter(resume=pk)
-    # ques_list=[]
-    # for ques in questions:
-    #     item={}
-    #     item['id']=ques.id
-    #     item['question']=ques.question
-    #     ques_list.append(item)
-    # print(ques_list)
-    # screening(ques_list)
-    # print(shared_list)
-    # with open('home/transcript.txt','r') as f:
-    #     for line in f:
-    #         line_list=line.split('#')
-    #         ques = QuestionBank.objects.get(id=line_list[0])
-    #         ans = CandidateResponse(question=ques,answer=line_list[1])
-    #         ans.save()
+    questions = QuestionBank.objects.filter(resume=pk)
+    ques_list=[]
+    for ques in questions:
+        item={}
+        item['id']=ques.id
+        item['question']=ques.question
+        ques_list.append(item)
+    print("Starting Interview")
+    screening(ques_list)
+    print("Interview Ended")
+
+    print("Evaluating answers")
+    with open('home/transcript.txt','r') as f:
+        for line in f:
+            line_list=line.split('#')
+            ques = QuestionBank.objects.get(id=line_list[0])
+            response = CandidateResponse(question=ques,answer=line_list[1])
+            feedback=interview_response(ques.question,line_list[1])
+            response.feedback=feedback
+            response.save()
+    print("Saved Responses and Feedback")
     return render(request, 'interview.html')
 
 def feedback(request, pk):
@@ -130,25 +142,18 @@ def feedback(request, pk):
     feedback_list=[]
     count = 1
     for ques in ques_list:
-        answers = CandidateResponse.objects.filter(question=ques)
-        for ans in answers:
-            ans.feedback="feedback here"
-            #interview_response(ques.question,ans.answer)
-            ans.save()
+        candidateresp = CandidateResponse.objects.filter(question=ques)
+        for ans in candidateresp:
             feedback_item={}
             feedback_item['serial_no']=count
             feedback_item['question']=ques.question
             feedback_item['answer']=ans.answer
-            print(ans.id)
             feedback_item['feedback']=ans.feedback
-            
             feedback_list.append(feedback_item)
             break
         count+=1
         if count == 4:
             break
-    
-    print(feedback_list)
     return render(request, 'feedback.html',context={'feedback': feedback_list, 'candidate': candidate})
 
 
