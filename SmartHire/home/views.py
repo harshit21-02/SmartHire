@@ -64,7 +64,7 @@ def upload_files(request):
 
 
 def cv_ranking(request, pk):
-
+    serial_no = 1
     job=Job.objects.get(id=pk)
     resume_list = Resume.objects.filter(job=job,shortlisted=True)
     candidate_details=[]
@@ -72,7 +72,9 @@ def cv_ranking(request, pk):
         candidate={}
         candidate['jobid']=job.id
         candidate['id']=resume.id
+        candidate['serial_no']=serial_no
         candidate_details.append(candidate)
+        serial_no+=1
     return render(request, 'cv_ranking.html',context={'candidate_details': candidate_details})
 
 
@@ -93,7 +95,14 @@ def interview(request, pk):
         item['question']=ques.question
         ques_list.append(item)
     print(ques_list)
-    print(screening(ques_list))
+    # screening(ques_list)
+    print(shared_list)
+    with open('home/transcript.txt','r') as f:
+        for line in f:
+            line_list=line.split('#')
+            ques = QuestionBank.objects.get(id=line_list[0])
+            ans = CandidateResponse(question=ques,answer=line_list[1])
+            ans.save()
     return HttpResponse("INTERVIEW")
 
 def feedback(request, pk):
@@ -106,6 +115,9 @@ def feedback(request, pk):
         feedback_item['answer']=ans.answer
         feedback_item['feedback']=interview_response(ques.question,ans)
         feedback_list.append(feedback_item)
+    
+    print(feedback_list)
+
     return HttpResponse("INTERVIEW Response here")
 
 

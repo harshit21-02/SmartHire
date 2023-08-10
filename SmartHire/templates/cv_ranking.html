@@ -19,8 +19,10 @@
     <div class="header">
       <!-- Nav Bar (from BootStrap documentation) -->
       <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="">SmartHire</a>
-        <a><img src="/SmartHire/SmartHire/images/logo.png" style="width: 130px;"></a>
+        
+        <a><img src="{% static 'images/curriculum-vitae_924498.png' %}" style="width: 130px;"></a>
+        <a class="navbar-brand" href="/">SmartHire</a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -28,16 +30,10 @@
           <ul class="navbar-nav ml-auto">
             <!-- ml auto creates margin here between the brand and the rest of the nav bar -->
             <li class="navbar-item">
-                <a class="nav-link" href="home.html"> Home</a>
+                <a class="nav-link" href="/"> Home</a>
               </li>
             <li class="navbar-item">
-              <a class="nav-link" href="index.html"> Upload Resume</a>
-            </li>
-            <li class="navbar-item">
-              <a class="nav-link" href="cv_ranking.html"> CV Ranking</a>
-            </li>
-            <li class="navbar-item">
-              <a class="nav-link" href=""> Interview</a>
+              <a class="nav-link" href="/"> Upload Resume</a>
             </li>
           </ul>
         </div>
@@ -59,9 +55,9 @@
 
             {% for candidate in candidate_details %}
             <div class="header candidate-card"> 
-              <h1>1</h1> 
+              <h1>{{candidate.serial_no}}</h1> 
               <div class="content">
-                <span class="name">{{candidate.id}}</span>
+                <span class="name">Candidate ID {{candidate.id}}</span>
                 <p class="description">Experienced SWE from abc company with an avg experience of 4 years </p> 
               </div> 
               <div class="actions">

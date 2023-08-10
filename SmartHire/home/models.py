@@ -19,5 +19,6 @@ class QuestionBank(models.Model):
 class CandidateResponse(models.Model):
     id=models.AutoField(primary_key=True)
     question=models.ForeignKey(QuestionBank, on_delete= models.CASCADE, to_field='id')
+    # resume=models.ForeignKey(Resume, on_delete=models.CASCADE, to_field='id')
     answer = models.TextField()
     

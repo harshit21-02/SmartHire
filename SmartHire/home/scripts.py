@@ -9,10 +9,8 @@ import multiprocessing
 #         "Tell us about your experience?"}
 #         # Add more questions here
 #     ]
-# Create a multiprocessing manager
-manager = multiprocessing.Manager()
-# Create a shared list using the manager
-shared_list = manager.list()
+
+shared_list = list()
 
 def add_question_overlay(frame, question):
     # Convert the frame to a Pillow image for text overlay
@@ -70,7 +68,7 @@ def record_video(questions):
     cap.release()
     cv2.destroyAllWindows()
 
-def record_audio(questions, shared_list):
+def record_audio(questions):
     
     answers=[]
     recording_duration = 4 
@@ -105,13 +103,15 @@ def record_audio(questions, shared_list):
     except KeyboardInterrupt:
         print("Recording interrupted")
 
-    shared_list=answers
-    return answers
+    with open("home/transcript.txt",'a') as f:
+        for items in answers:
+            f.write(str(items['id'])+'#'+items['answer']+'\n')
+
     print("Recording completed.")
 
 def screening(questions):
     p1 = multiprocessing.Process(target=record_video, args=(questions,))
-    p2 = multiprocessing.Process(target=record_audio, args=(questions, shared_list))
+    p2 = multiprocessing.Process(target=record_audio, args=(questions,))
 
     # Start the processes
     p1.start()
@@ -121,5 +121,4 @@ def screening(questions):
     p1.join()
     p2.join()
 
-    return shared_list
 

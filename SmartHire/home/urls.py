@@ -24,6 +24,7 @@ urlpatterns = [
     path('cv-ranking/<int:pk>/', views.cv_ranking, name='cv_ranking'),
     path('send-email/<int:pk>/<int:jobid>', views.send_email, name='send-email'),
     path('interview/<int:pk>/', views.interview, name='interview'),
+    path('feedback/<int:pk>/', views.feedback, name='feedback'),
 ]
 
 if settings.DEBUG:
