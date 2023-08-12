@@ -59,8 +59,6 @@ body {
     margin-top: 10px;
     border: 1px solid #ccc;
     padding: 10px;
-    display: flex;
-    align-items: center;
   }
 
   .resume-img {
