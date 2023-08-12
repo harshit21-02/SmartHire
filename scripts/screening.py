@@ -6,21 +6,23 @@ import speech_recognition as sr
 import multiprocessing
 questions = [{'id':1,'question':
         "What is your name?"},{'id':2,'question':
-        "Tell us about your experience?"}
+        "Tell us about your experience?"},
+        {"id": 3, 'question': 'What do you expect from thsi company in the long term'}
         # Add more questions here
     ]
 
 def add_question_overlay(frame, question):
     # Convert the frame to a Pillow image for text overlay
+    
     img_pil = Image.fromarray(frame)
 
     # Set font properties
     font = ImageFont.truetype("arial.ttf", 20)
-    text_color = (255, 0, 255)  # White color
+    text_color = (0, 0, 0)  # White color
 
     # Add the question as an overlay on the image
     draw = ImageDraw.Draw(img_pil)
-    draw.text((10, 30), question, font=font, fill=text_color)
+    draw.text((10, 430), question, font=font, fill=text_color)
 
     # Convert back to OpenCV format (numpy array)
     frame_with_overlay = np.array(img_pil)
@@ -68,11 +70,7 @@ def record_audio(questions):
     recording_duration = 4 
     for question in questions:
 
-
         recognizer = sr.Recognizer()
-
-    # Set the recording duration in seconds # Adjust this as needed
-
         with sr.Microphone() as source:
             recognizer.adjust_for_ambient_noise(source)
             print("Recording...")
@@ -95,8 +93,9 @@ def record_audio(questions):
             print("Recording interrupted")
 
         answers.append({'id':question['id'], 'answer': transcript})
-    return answers
     print("Recording completed.")
+    return answers
+
 
 if __name__ == "__main__":
     p1 = multiprocessing.Process(target=record_video, args=(questions,))
