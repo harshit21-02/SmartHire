@@ -14,15 +14,16 @@ shared_list = list()
 
 def add_question_overlay(frame, question):
     # Convert the frame to a Pillow image for text overlay
+    
     img_pil = Image.fromarray(frame)
 
     # Set font properties
     font = ImageFont.truetype("arial.ttf", 20)
-    text_color = (255, 0, 255)  # White color
+    text_color = (0, 0, 0)  # White color
 
     # Add the question as an overlay on the image
     draw = ImageDraw.Draw(img_pil)
-    draw.text((10, 30), question, font=font, fill=text_color)
+    draw.text((10, 430), question, font=font, fill=text_color)
 
     # Convert back to OpenCV format (numpy array)
     frame_with_overlay = np.array(img_pil)
