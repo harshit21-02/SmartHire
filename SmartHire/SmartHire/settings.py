@@ -31,7 +31,11 @@ SECRET_KEY = "django-insecure-w8(gkwc*t11_^2ssp8-mo%fgab!tip1_o_@fi338f8q@u7@w#z
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+# DEBUG=1
+# SECRET_KEY='w7a8a@lj8nax7tem0caa2f2rjm2ahsascyf83sa5alyv68vea'
+# ALLOWED_HOSTS=['localhost 127.0.0.1 [::1] llm-hackathon-codered.azurewebsites.net/']
+# CSRF_TRUSTED_ORIGINS='https://llm-hackathon-codered.azurewebsites.net/'
+# SECURE_SSL_REDIRECT=0
 
 
 # Application definition
@@ -81,13 +85,13 @@ WSGI_APPLICATION = "SmartHire.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DBNAME'),
-        'USER': env('DBUSER'),
-        'PASSWORD': env('DBPASS'),
-        'HOST': env('DBHOST'),
-        'PORT': env('DBPORT'),
+        'NAME': os.environ.get('DBNAME'),
+        'HOST': os.environ.get('DBHOST'),
+        'USER': os.environ.get('DBUSER'),
+        'PASSWORD': os.environ.get('DBPASS'),
+        # 'OPTIONS': {'sslmode': 'require'},
     }
 }
 
