@@ -15,8 +15,8 @@ from .utils import *
 from .scripts import *
 from .sort_resume import ResumeSearch
 
-subscription_key = "your subscription key"
-endpoint = "your end point"
+subscription_key = "9b7bc13b2fb0479c9ff6869409d9cdc1"
+endpoint = "https://pibit-azure-ocr-paid.cognitiveservices.azure.com/"
 
 computervision_client = ComputerVisionClient(
         endpoint, CognitiveServicesCredentials(subscription_key))
