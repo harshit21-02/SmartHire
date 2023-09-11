@@ -34,7 +34,9 @@ ALLOWED_HOSTS = ['*']
 # DEBUG=1
 # SECRET_KEY='w7a8a@lj8nax7tem0caa2f2rjm2ahsascyf83sa5alyv68vea'
 # ALLOWED_HOSTS=['localhost 127.0.0.1 [::1] llm-hackathon-codered.azurewebsites.net/']
-# CSRF_TRUSTED_ORIGINS='https://llm-hackathon-codered.azurewebsites.net/'
+CSRF_TRUSTED_ORIGINS= ['https://hackathon.thecooldomain.tech']
+CORS_ORGIN_WHITELIST = ['https://hackathon.thecooldomain.tech']
+
 # SECURE_SSL_REDIRECT=0
 
 
@@ -85,16 +87,12 @@ WSGI_APPLICATION = "SmartHire.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DBNAME'),
-        'HOST': os.environ.get('DBHOST'),
-        'USER': os.environ.get('DBUSER'),
-        'PASSWORD': os.environ.get('DBPASS'),
-        # 'OPTIONS': {'sslmode': 'require'},
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
 
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
